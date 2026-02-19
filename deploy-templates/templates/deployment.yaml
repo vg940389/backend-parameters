@@ -30,14 +30,13 @@ spec:
       serviceAccountName: {{ include "backend-parameters.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-        {{- end}}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-         livenessProbe:
+          livenessProbe:
             failureThreshold: 3
             periodSeconds: 10
             successThreshold: 1
@@ -54,7 +53,6 @@ spec:
             timeoutSeconds: 1
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
@@ -81,20 +79,19 @@ spec:
               mountPath: /config
       volumes:
         - name: secret-volume
-          configMap:
-            name: secret-extra-config
+          secret:
+            secretName: secret-extra-env
             items:
               - key: application.secret.properties
                 path: application.secret.properties
-       - name: configmap-volume
+        - name: configmap-volume
           configMap:
-            name: cm-extra-config
+            name: cm-extra-env
             items:
               - key: application.properties
                 path: application.properties
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
