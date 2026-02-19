@@ -44,7 +44,7 @@ spec:
               port: http
             timeoutSeconds: 1
           readinessProbe:
-            failureThreshold: 3
+            failureThreshold: 4
             initialDelaySeconds: 20
             periodSeconds: 10
             successThreshold: 1
