@@ -60,8 +60,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: cm-extra-env
-            - secretRef:
-                name: secret-extra-env
           env:
             - name: BACKEND_PROFILES_ACTIVE
               value: dev
@@ -70,26 +68,6 @@ spec:
                 configMapKeyRef:
                   name: cm-extra-config
                   key: ENV_VAR1
-          volumeMounts:
-            - name: secret-volume
-              readOnly: true
-              mountPath: /secret-config
-            - name: configmap-volume
-              readOnly: true
-              mountPath: /config
-      volumes:
-        - name: secret-volume
-          secret:
-            secretName: secret-extra-env
-            items:
-              - key: application.secret.properties
-                path: application.secret.properties
-        - name: configmap-volume
-          configMap:
-            name: cm-extra-env
-            items:
-              - key: application.properties
-                path: application.properties
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 8 }}
       {{- with .Values.affinity }}
