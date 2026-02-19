@@ -68,6 +68,22 @@ spec:
                 configMapKeyRef:
                   name: cm-extra-config
                   key: ENV_VAR1
+          volumeMounts:
+            #- name: secret-volume
+              #readOnly: true
+              #mountPath: /secret-config
+            - name: configmap-volume
+              readOnly: true
+              mountPath: /config
+      volumes:
+        - name: configmap-volume
+          configMap:
+            name: cm-extra-config
+            items:
+              # Specifies the key in the ConfigMap to include in the volume.
+              - key: application.properties
+                # File name inside the mounted volume for this key.
+                path: application.properties
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 8 }}
       {{- with .Values.affinity }}
