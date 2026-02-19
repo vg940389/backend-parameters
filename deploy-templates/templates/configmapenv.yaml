@@ -1,0 +1,11 @@
+apiVersion: v1
+# Defines a ConfigMap, which stores configuration data as key-value pairs.
+kind: ConfigMap
+metadata:
+  name: cm-extra-env
+  namespace: 74cudwfj-parameters-dev
+# Key-value pairs representing configuration data for the application.
+# These values can be accessed by the container as environment variables or mounted as files.
+data:
+  SERVER_PORT: "8080"
+  LOGGING_LEVEL_ROOT: "INFO"
