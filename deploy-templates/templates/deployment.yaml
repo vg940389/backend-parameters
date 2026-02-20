@@ -75,6 +75,11 @@ spec:
                 secretKeyRef:
                   name: secret-extra-config
                   key: ENV_VAR4
+            - name: ENV_VAR5
+              valueFrom:
+                secretKeyRef:
+                  name: backend-parameters
+                  key: ENV_VAR5
           volumeMounts:
             - name: secret-volume
               readOnly: true
@@ -82,6 +87,9 @@ spec:
             - name: configmap-volume
               readOnly: true
               mountPath: /config
+            - name: ps-volume
+              readOnly: true
+              mountPath: /ps-config
       volumes:
         - name: configmap-volume
           configMap:
@@ -97,6 +105,12 @@ spec:
             items:
               - key: application.secret.properties
                 path: application.secret.properties
+        - name: ps-volume
+          secret:
+            secretName: backend-parameters
+            items:
+              - key: application.secret.properties.from.ps
+                path: application.secret.properties.from.ps
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 8 }}
       {{- with .Values.affinity }}
