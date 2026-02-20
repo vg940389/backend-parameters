@@ -70,6 +70,11 @@ spec:
                 configMapKeyRef:
                   name: cm-extra-config
                   key: ENV_VAR1
+            - name: ENV_VAR4
+              valueFrom:
+                secretKeyRef:
+                  name: secret-extra-config
+                  key: ENV_VAR4
           volumeMounts:
             - name: secret-volume
               readOnly: true
